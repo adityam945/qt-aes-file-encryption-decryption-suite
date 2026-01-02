@@ -1,0 +1,49 @@
+Here is the complete workflow from start to finish for securing a folder using your application suite.
+
+Phase 1: Setup (One-Time)
+Register Client:
+
+Decryption App: Click "Register". It generates a local private_key.
+
+Action: Sends Public Key + Machine Name to the Encryption Server.
+
+Encryption App: Stores this identity in Encryption_Host.db.
+
+Phase 2: Encryption (On Server/Host)
+Encrypt Data (AES):
+
+Input: Source Folder (e.g., /docs).
+
+Process: App generates a random AES Session Key. Encrypts every file in /docs.
+
+Output: An encrypted folder + session_key.txt (Raw Key).
+
+Lock the Key (RSA):
+
+Input: The session_key.txt + Select Target Machine (e.g., "Aditya-Laptop").
+
+Process: App encrypts the AES key using the Laptop's Public Key.
+
+Output: Creates a distribution folder (rsa_ready_...) containing the encrypted files and a session_key.txt.rsa_locked file. The raw key is discarded.
+
+Phase 3: Transfer
+Move Files:
+
+Copy the rsa_ready_... folder to the client machine via USB, Cloud, or Network.
+
+Phase 4: Decryption (On Client)
+Unlock Key (RSA):
+
+Input: session_key.txt.rsa_locked (from folder) + Local private_key.
+
+Process: App uses Private Key to decrypt the locked file.
+
+Output: Restores the session_key.txt (Raw AES Key) into memory or disk.
+
+Decrypt Data (AES):
+
+Input: The rsa_ready folder + The restored session_key.txt.
+
+Process: App uses the AES key to decrypt every file.
+
+Output: Original folder /docs is restored perfectly.

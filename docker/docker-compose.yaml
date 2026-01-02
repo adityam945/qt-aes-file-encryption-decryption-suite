@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  encryption-server:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    
+    image: encryption-app
+    container_name: encryption_server
+    
+    network_mode: host
+    
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - ./encryption_data_db:/app/encyption_desktop/db
+      
+      # - /home/aditya/..:/mnt/source_files
+
+    # Automatically restart unless you explicitly stop it
+    restart: unless-stopped

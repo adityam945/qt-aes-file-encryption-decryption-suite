@@ -1,0 +1,28 @@
+# 1. Build the Image
+sudo docker build -f docker/Dockerfile -t encryption-app .
+
+check container
+sudo docker run -it --rm encryption-app /bin/bash
+
+# 2. Allow GUI Access (Only needed if you want to see the GUI)
+xhost +local:docker
+
+mkdir -p ~/encryption_data
+sudo chown -R $USER:$USER ~/encryption_data
+
+# 3. Run the Container
+sudo docker run -it --rm \
+    --net=host \
+    --device /dev/dri:/dev/dri \
+    -e DISPLAY=$DISPLAY \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v ~/encryption_data:/app/encyption_desktop/db \
+    encryption-app
+
+
+OR
+
+
+# 4. Use compose (cd <path>/docker)
+
+sudo docker-compose up
